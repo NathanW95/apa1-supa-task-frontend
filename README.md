@@ -9,67 +9,19 @@ This project for an open ending CRUD app, what the app does is your choice but i
    - Create a free Supabase account if you don't have one
    - Create a new project in your Supabase dashboard
    - Copy your Supabase URL and anon key into the `.env` file (use `.env.example` as a template)
-3. Start the development server: Run `npm run dev` in your terminal.
+3. Start the development server: Run `node server.js` in your terminal.
 4. Open your web browser and navigate to `http://localhost:3000` to access the application.
 
 ## Database Management
 The project uses Supabase as the database provider:
 
-- The database tables will be created automatically based on the schema definitions in the codebase.
-- You can manually seed test data through the Supabase dashboard or use the provided script: `npm run database:seed`.
-- To view and manage your data directly, use the Supabase dashboard interface.
+The [companion backend app](https://github.com/jdowie-ada/apa1-supa-task-backend) will be used to manage the database 
 
 ## Testing
 This is an open-ended project, and you may choose your preferred testing approach:
 - Manual testing through the application interface
 - Leveraging Supabase's built-in Row Level Security (RLS) policy testing
 - Writing custom unit or integration tests with a framework of your choice (Jest, Mocha, etc.)
-
-## Database Schema
-
-### Product (Base table)
-- id: UUID (Primary Key)
-- name: String
-- price: Float
-- quantity: Integer
-- type: String (enum: 'clothing', 'electronics', 'books', 'groceries', 'toys')
-- created_at: Timestamp
-- updated_at: Timestamp
-
-### Clothing
-- product_id: UUID (Foreign Key)
-- size: String
-- material: String
-- color: String
-- brand: String
-- gender: String
-
-### Electronics
-- product_id: UUID (Foreign Key)
-- brand: String
-- warranty: String
-- model: String
-- power_consumption: Float
-- dimensions: String
-
-### Books
-- product_id: UUID (Foreign Key)
-- author: String
-- isbn: String
-- genre: String
-- publication_date: Date
-
-### Groceries
-- product_id: UUID (Foreign Key)
-- expiration_date: Date
-- nutritional_info: String
-- organic: Boolean
-
-### Toys
-- product_id: UUID (Foreign Key)
-- age_group: String
-- material: String
-- battery_operated: Boolean
 
 ## Assignment Objectives
 - Extend and enhance the existing web application
@@ -82,28 +34,27 @@ This is an open-ended project, and you may choose your preferred testing approac
 ## TODO
 
 ### Core Functionalities
-1. Implement full CRUD operations for all product types using Supabase's JavaScript client
-2. Create a unified interface to manage all product types
-3. Implement the Supabase authentication system for basic user management
-4. Create appropriate database relationships and constraints using Supabase's SQL editor
+1. Implement full CRUD operations for all items using Supabase's JavaScript client
+2. Create a unified interface to manage all items
+3. Create appropriate database relationships and constraints using Supabase's SQL editor
 
 ### Extend Functionalities
-1. Implement the models for all product types (Clothing, Electronics, Books, Groceries, Toys)
-2. Update the controllers and views to handle all product types
-3. Enhance the frontend to display and manage the various product types
-4. Implement sorting and filtering options using Supabase queries
-5. Extend currency conversion functionality to support multiple currencies (EUR, JPY, CAD, AUD)
-   - Refer to [Exchange Rate API](https://www.exchangerate-api.com/docs/free)
-6. Develop a dashboard showing current stock status and key metrics
+1. User login auth etc.
+2. Enhance the frontend to display and manage the various items
+3. Implement sorting and filtering options
+4. (on backend) write more edge functions to extend API
+
+You're free to come up with your own ideas too either on the front or backend
 
 ### Good Programming Standards
 1. Structure your code for readability and modularity
-2. Use consistent naming conventions for Supabase tables and columns
-3. Implement proper error handling for Supabase operations
+2. Use consistent naming conventions
+3. Implement proper error handling 
 4. Document your code thoroughly
+etc.
 
 ### Testing
-Choose one or more testing approaches:
+Ideas for testing:
 1. Document manual testing procedures and results
 2. Leverage Supabase's RLS policies and test them
 3. Write unit/integration tests for critical functionality
@@ -123,12 +74,5 @@ Choose one or more testing approaches:
    - Edge Functions for complex operations
 4. Add analytics dashboard using Supabase's built-in analytics
 
-## Viva Preparation
-Be prepared to discuss:
-- Your approach to implementing the Supabase database schema
-- How you structured your application around Supabase's features
-- Security considerations when using Supabase
-- Challenges faced during development and how you overcame them
-- How you would scale this application for larger deployments
 
 Remember to document your development process, including any challenges you encounter and how you solve them. This will be valuable during your viva and for maintaining the project in the future.
