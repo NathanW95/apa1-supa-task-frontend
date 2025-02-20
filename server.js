@@ -21,7 +21,7 @@ app.post('/api/new_message', async (req, res) => {
   try {
     
     // Call the Supabase Edge Function for messages
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/get-messages`, {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/messages`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
@@ -46,7 +46,7 @@ app.get('/api/messages', async (req, res) => {
   try {
 
     // Call the Supabase Edge Function for messages
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/get-messages`, {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/messages`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`

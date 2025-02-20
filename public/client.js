@@ -33,7 +33,7 @@ const postMessage = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message: "Lalala!" }),
+      body: JSON.stringify({ message: "If you can see this POST is working :)" }),
     });
 
     if (!response.ok) {
