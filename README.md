@@ -1,17 +1,16 @@
 # APA1 Supa Task Frontend
 
 ## Project Overview
-This project is a stock management system for a supermarket, built with Node.js, Express, and Supabase for database management.
+This project for an open ending CRUD app, what the app does is your choice but it should implement CRUD functionality
 
 ## Setup Instructions
-1. Accepting the assignment automatically creates a fork. You do not need to fork it again.
-2. Install dependencies: Run `npm install` in your terminal to install all necessary dependencies.
-3. Set up Supabase:
+1. Install dependencies: Run `npm install` in your terminal to install all necessary dependencies.
+2. Set up Supabase:
    - Create a free Supabase account if you don't have one
    - Create a new project in your Supabase dashboard
    - Copy your Supabase URL and anon key into the `.env` file (use `.env.example` as a template)
-4. Start the development server: Run `npm run dev` in your terminal.
-5. Open your web browser and navigate to `http://localhost:3000` to access the application.
+3. Start the development server: Run `npm run dev` in your terminal.
+4. Open your web browser and navigate to `http://localhost:3000` to access the application.
 
 ## Database Management
 The project uses Supabase as the database provider:
