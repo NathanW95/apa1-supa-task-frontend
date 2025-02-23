@@ -17,6 +17,7 @@ app.use(express.json());
 app.use(express.static('public')); // Serve static files from 'public' directory
 
 // New POST endpoint
+// CAN DELETE
 app.post('/api/new_message', async (req, res) => {
   try {
     
@@ -42,6 +43,7 @@ app.post('/api/new_message', async (req, res) => {
 });
 
 // New GET endpoint
+// CAN DELETE
 app.get('/api/messages', async (req, res) => {
   try {
 
@@ -57,6 +59,55 @@ app.get('/api/messages', async (req, res) => {
       throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
     }
     
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('GET request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// New POST endpoint
+app.post('/api/new_expense', async (req, res) => {
+  try {
+
+    // Call the Supabase Edge Function for messages
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify(req.body)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('GET request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// New GET endpoint
+app.get('/api/expenses', async (req, res) => {
+  try {
+
+    // Call the Supabase Edge Function for messages
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
     const data = await response.json();
     res.json(data);
   } catch (error) {

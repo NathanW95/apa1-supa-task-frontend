@@ -1,11 +1,39 @@
-// Writing a function to communicate with our local server
+const renderExpenses = (expenses) => {
+  const container = document.getElementById("expensesContainer");
+  container.innerHTML = ""; // Clear previous content
 
-const getMessages = async () => {
+  expenses.forEach(expense => {
+    const tile = document.createElement("div");
+    tile.className = "expense-tile";
+
+    const date = new Date(expense.date).toLocaleDateString();
+    const description = expense.description || "No description";
+    const amount = expense.amount ? `£${expense.amount.toFixed(2)}` : "N/A";
+    const category = expense.category || "Uncategorized";
+
+    tile.innerHTML = `
+      <div class="content">
+        <div><strong>Description:</strong> ${description}</div>
+        <div><strong>Amount:</strong> ${amount}</div>
+        <div><strong>Date:</strong> ${date}</div>
+        <div><strong>Category:</strong> ${category}</div>
+      </div>
+      <div class="icons">
+        <span class="icon" onclick="editExpense('${expense.id}')">✏️</span>
+        <span class="icon" onclick="deleteExpense('${expense.id}')">🗑️</span>
+      </div>
+    `;
+
+    container.appendChild(tile);
+  });
+};
+
+const getExpenses = async () => {
   const resultElement = document.getElementById("result");
   resultElement.textContent = "Loading...";
 
   try {
-    const response = await fetch(`/api/messages`, {
+    const response = await fetch(`/api/expenses`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -17,38 +45,21 @@ const getMessages = async () => {
     }
 
     const data = await response.json();
-    resultElement.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    renderExpenses(data);
+    resultElement.textContent = ""; // Clear the loading message
   } catch (error) {
     resultElement.textContent = `Error: ${error.message}`;
   }
 };
 
-const postMessage = async () => {
-  const resultElement = document.getElementById("result");
-  resultElement.textContent = "Loading...";
-
-  try {
-    const response = await fetch(`/api/new_message`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: "If you can see this POST is working :)" }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    resultElement.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-  } catch (error) {
-    resultElement.textContent = `Error: ${error.message}`;
-  }
+const editExpense = (id) => {
+  // Implement edit functionality
+  console.log(`Edit expense with ID: ${id}`);
 };
 
-document
-  .getElementById("callFunction")
-  .addEventListener("click", getMessages);
+const deleteExpense = (id) => {
+  // Implement delete functionality
+  console.log(`Delete expense with ID: ${id}`);
+};
 
-// To begin try adding another button to use the postMessage function
+document.getElementById("callFunction").addEventListener("click", getExpenses);
