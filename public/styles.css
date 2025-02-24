@@ -15,6 +15,10 @@ button {
     transition: background-color 0.3s;
 }
 
+#showForm.active {
+    background: #2a9d8f; /* Active color when form is shown */
+}
+
 #result {
     margin-top: 20px;
     padding: 15px;
@@ -67,4 +71,11 @@ button {
 
 .icon:hover {
     color: #3ecf8e;
+}
+
+.expense-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }

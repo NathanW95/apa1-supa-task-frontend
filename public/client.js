@@ -8,8 +8,8 @@ const renderExpenses = (expenses) => {
 
     const date = new Date(expense.date).toLocaleDateString();
     const description = expense.description || "No description";
-    const amount = expense.amount ? `£${expense.amount.toFixed(2)}` : "N/A";
-    const category = expense.category || "Uncategorized";
+    const amount = `£${expense.amount.toFixed(2)}`;
+    const category = expense.category;
 
     tile.innerHTML = `
       <div class="content">
@@ -26,9 +26,7 @@ const renderExpenses = (expenses) => {
 
     container.appendChild(tile);
   });
-};
-
-const getExpenses = async () => {
+};const getExpenses = async () => {
   const resultElement = document.getElementById("result");
   resultElement.textContent = "Loading...";
 
@@ -52,6 +50,43 @@ const getExpenses = async () => {
   }
 };
 
+const postExpense = async () => {
+  const resultElement = document.getElementById("result");
+  const description = document.getElementById("description").value.trim();
+  const category = document.getElementById("category").value;
+  const amount = parseFloat(document.getElementById("amount").value);
+
+  if (!description || amount <= 0) {
+    resultElement.textContent = "Please enter valid expense details.";
+    return;
+  }
+
+  resultElement.textContent = "Loading...";
+
+  try {
+    const response = await fetch(`/api/new_expense`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ description, category, amount }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    await getExpenses();
+
+    document.getElementById("description").value = "";
+    document.getElementById("amount").value = "";
+
+    resultElement.textContent = "";
+  } catch (error) {
+    resultElement.textContent = `Error: ${error.message}`;
+  }
+};
+
 const editExpense = (id) => {
   // Implement edit functionality
   console.log(`Edit expense with ID: ${id}`);
@@ -62,4 +97,12 @@ const deleteExpense = (id) => {
   console.log(`Delete expense with ID: ${id}`);
 };
 
-document.getElementById("callFunction").addEventListener("click", getExpenses);
+document.getElementById("getExpenses").addEventListener("click", getExpenses);
+document.getElementById("addExpense").addEventListener("click", postExpense);
+document.getElementById("showForm").addEventListener("click", () => {
+  const form = document.getElementById("expenseForm");
+  const button = document.getElementById("showForm");
+
+  form.style.display = form.style.display === "none" ? "block" : "none";
+  button.classList.toggle("active", form.style.display === "block");
+});
