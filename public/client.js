@@ -6,7 +6,7 @@ const renderExpenses = (expenses) => {
     const tile = document.createElement("div");
     tile.className = "expense-tile";
 
-    const date = new Date(expense.date).toLocaleDateString();
+    const date = new Date(expense.date).toLocaleDateString(); // TODO EXTRACT DATE / Time to variables to display
     const description = expense.description || "No description";
     const amount = `£${expense.amount.toFixed(2)}`;
     const category = expense.category;
@@ -61,7 +61,7 @@ const postExpense = async () => {
     return;
   }
 
-  resultElement.textContent = "Loading...";
+  resultElement.textContent = "Adding expense...";
 
   try {
     const response = await fetch(`/api/new_expense`, {
@@ -87,15 +87,36 @@ const postExpense = async () => {
   }
 };
 
-const editExpense = (id) => {
+const editExpense = async (id) => {
   // Implement edit functionality
   console.log(`Edit expense with ID: ${id}`);
 };
 
-const deleteExpense = (id) => {
-  // Implement delete functionality
+const deleteExpense = async (id) => {
+  const resultElement = document.getElementById("result");
+  resultElement.textContent = "Deleting...";
   console.log(`Delete expense with ID: ${id}`);
-};
+
+  try {
+    const response = await fetch(`/api/delete_expense`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    await getExpenses();
+    resultElement.textContent = "";
+  } catch (error) {
+    resultElement.textContent = `Error: ${error.message}`;
+  }
+}
+
 
 document.getElementById("getExpenses").addEventListener("click", getExpenses);
 document.getElementById("addExpense").addEventListener("click", postExpense);
@@ -106,3 +127,4 @@ document.getElementById("showForm").addEventListener("click", () => {
   form.style.display = form.style.display === "none" ? "block" : "none";
   button.classList.toggle("active", form.style.display === "block");
 });
+
