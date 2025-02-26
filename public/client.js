@@ -6,28 +6,27 @@ const renderExpenses = (expenses) => {
     const tile = document.createElement("div");
     tile.className = "expense-tile";
 
-    const date = new Date(expense.date).toLocaleDateString(); // TODO EXTRACT DATE / Time to variables to display
+    const date = new Date(expense.date_added).toLocaleDateString();
     const description = expense.description || "No description";
     const amount = `£${expense.amount.toFixed(2)}`;
     const category = expense.category;
 
     tile.innerHTML = `
       <div class="content">
-        <div><strong>Description:</strong> ${description}</div>
-        <div><strong>Amount:</strong> ${amount}</div>
-        <div><strong>Date:</strong> ${date}</div>
-        <div><strong>Category:</strong> ${category}</div>
+        <div><strong>${description}</strong></div>
+        <div><strong></strong>${amount}</div>
+        <div class="category"><strong>${category}</strong></div>
       </div>
       <div class="icons">
         <span class="icon" onclick="editExpense('${expense.id}')">✏️</span>
         <span class="icon" onclick="deleteExpense('${expense.id}')">🗑️</span>
       </div>
+      <div class="date"><strong>Date:</strong> ${date}</div>
     `;
 
     container.appendChild(tile);
   });
-};const getExpenses = async () => {
-  const resultElement = document.getElementById("result");
+};const getExpenses = async () => {  const resultElement = document.getElementById("result");
   resultElement.textContent = "Loading...";
 
   try {
