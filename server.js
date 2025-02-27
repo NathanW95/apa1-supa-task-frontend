@@ -71,8 +71,6 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 // New POST endpoint
 app.post('/api/new_expense', async (req, res) => {
   try {
-
-    // Call the Supabase Edge Function for messages
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
       method: 'POST',
       headers: {
@@ -119,7 +117,7 @@ app.get('/api/expenses', async (req, res) => {
 });
 
 // New PUT endpoint
-app.put('/api/edit_expense', async (req, res) => {
+app.put('/api/update_expense', async (req, res) => {
   try {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
       method: 'PUT',
