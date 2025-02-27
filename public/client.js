@@ -8,7 +8,7 @@ const renderExpenses = (expenses) => {
     tile.id = `expense-tile-${expense.id}`;
 
     const date = new Date(expense.date_added).toLocaleDateString();
-    const description = expense.description || "No description";
+    const description = expense.description;
     const amount = `£${expense.amount.toFixed(2)}`;
     const category = expense.category;
 
@@ -32,8 +32,9 @@ const renderExpenses = (expenses) => {
       </div>
       <div class="icons">
         <span class="icon edit-icon" onclick="toggleEditMode('${expense.id}')">✏️</span>
-        <span class="icon save-icon" onclick="saveExpense('${expense.id}')" style="display: none;">✔️</span>
         <span class="icon delete-icon" onclick="deleteExpense('${expense.id}')">🗑️</span>
+          <span class="icon save-icon" onclick="saveExpense('${expense.id}')" style="display: none;">✅</span>
+        <span class="icon cancel-icon" onclick="cancelEditMode('${expense.id}')" style="display: none;">❌</span>
       </div>
       <div class="date"><strong>Date:</strong> ${date}</div>
     `;
@@ -112,8 +113,9 @@ const toggleEditMode = (id) => {
   const categorySelect = tile.querySelector(".edit-category");
 
   const editIcon = tile.querySelector(".edit-icon");
-  const saveIcon = tile.querySelector(".save-icon");
   const deleteIcon = tile.querySelector(".delete-icon");
+  const saveIcon = tile.querySelector(".save-icon");
+  const cancelIcon = tile.querySelector(".cancel-icon");
 
   if (isEditing) {
     descriptionDiv.style.display = "none";
@@ -125,8 +127,9 @@ const toggleEditMode = (id) => {
     categorySelect.style.display = "block";
 
     editIcon.style.display = "none";
-    saveIcon.style.display = "inline";
     deleteIcon.style.display = "none";
+    saveIcon.style.display = "inline";
+    cancelIcon.style.display = "inline";
   } else {
     descriptionDiv.style.display = "block";
     amountDiv.style.display = "block";
@@ -137,8 +140,9 @@ const toggleEditMode = (id) => {
     categorySelect.style.display = "none";
 
     editIcon.style.display = "inline";
-    saveIcon.style.display = "none";
     deleteIcon.style.display = "inline";
+    saveIcon.style.display = "none";
+    cancelIcon.style.display = "none";
   }
 };
 
@@ -172,6 +176,25 @@ const saveExpense = async (id) => {
   } catch (error) {
     alert(`Error: ${error.message}`);
   }
+};
+
+
+const cancelEditMode = (id) => {
+  const tile = document.getElementById(`expense-tile-${id}`);
+
+  const descriptionDiv = tile.querySelector(".description");
+  const amountDiv = tile.querySelector(".amount");
+  const categoryDiv = tile.querySelector(".category");
+
+  const descriptionInput = tile.querySelector(".edit-description");
+  const amountInput = tile.querySelector(".edit-amount");
+  const categorySelect = tile.querySelector(".edit-category");
+
+  descriptionInput.value = descriptionDiv.textContent.trim();
+  amountInput.value = parseFloat(amountDiv.textContent.replace('£', ''));
+  categorySelect.value = categoryDiv.textContent.trim();
+
+  toggleEditMode(id);
 };
 
 const deleteExpense = async (id) => {

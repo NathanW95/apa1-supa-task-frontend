@@ -114,12 +114,6 @@ button {
 
 }
 
-.save-icon {
-    color: #3ecf8e;
-    cursor: pointer;
-}
-
-
 
 @media (max-width: 768px) {
     .expense-tile {
