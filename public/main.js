@@ -152,8 +152,6 @@ const saveExpense = async (id) => {
   const amount = parseFloat(tile.querySelector(".edit-amount").value);
   const category = tile.querySelector(".edit-category").value;
 
-  console.log(id, description, amount, category);
-
   if (!description || amount <= 0 || !category) {
     alert("Please enter valid expense details.");
     return;
