@@ -39,6 +39,10 @@ body {
     width: 53%;
 }
 
+#createAccountButton {
+    background: #2472cd;
+}
+
 h1 {
     text-align: center;
 }

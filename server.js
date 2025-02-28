@@ -68,7 +68,7 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 //   }
 // });
 
-// New POST endpoint
+// POST endpoint EXPENSES
 app.post('/api/new_expense', async (req, res) => {
   try {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
@@ -92,7 +92,7 @@ app.post('/api/new_expense', async (req, res) => {
   }
 });
 
-// New GET endpoint
+// GET endpoint EXPENSES
 app.get('/api/expenses', async (req, res) => {
   try {
 
@@ -116,7 +116,7 @@ app.get('/api/expenses', async (req, res) => {
   }
 });
 
-// New PUT endpoint
+// PUT endpoint EXPENSES
 app.put('/api/update_expense', async (req, res) => {
   try {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
@@ -140,7 +140,7 @@ app.put('/api/update_expense', async (req, res) => {
   }
 });
 
-// New DELETE endpoint
+// DELETE endpoint EXPENSES
 app.delete('/api/delete_expense', async (req, res) => {
   try {
     const { id } = req.body;
@@ -165,6 +165,54 @@ app.delete('/api/delete_expense', async (req, res) => {
   }
 });
 
+
+// POST endpoint create USERS
+app.post('/api/create_user', async (req, res) => {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/users`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('POST request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST endpoint login USERS
+app.post('/api/login', async (req, res) => {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/login`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('POST request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Start server
 app.listen(PORT, () => {
