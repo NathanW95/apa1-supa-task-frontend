@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '/index.html';
     return;
   }
-
-  console.log('User ID:', userId);
-
-  // getExpenses(userId);
+  console.log(userId);
+  console.log(typeof userId);
+  getExpenses(userId);
+  if (userId === '5') {
+    getAllExpenses();
+  }
 });
 
 const renderExpenses = (expenses) => {
@@ -56,10 +58,35 @@ const renderExpenses = (expenses) => {
 
     container.appendChild(tile);
   });
-};const getExpenses = async () => {  const resultElement = document.getElementById("result");
+};
+
+const getExpenses = async (userId) => {  const resultElement = document.getElementById("result");
   resultElement.textContent = "Getting expenses...";
   try {
-    const response = await fetch(`/api/expenses`, {
+    const response = await fetch(`/api/expenses?userId=${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    renderExpenses(data);
+    resultElement.textContent = "";
+  } catch (error) {
+    resultElement.textContent = `Error: ${error.message}`;
+  }
+};
+
+// Old logic to get all expenses
+const getAllExpenses = async () => {  const resultElement = document.getElementById("result");
+  resultElement.textContent = "Getting expenses...";
+  try {
+    const response = await fetch(`/api/all_expenses`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

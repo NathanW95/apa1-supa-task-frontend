@@ -95,8 +95,32 @@ app.post('/api/new_expense', async (req, res) => {
 // GET endpoint EXPENSES
 app.get('/api/expenses', async (req, res) => {
   try {
+    const url = new URL(req.url, 'http://localhost:3000');
+    const userId = url.searchParams.get('userId');
 
     // Call the Supabase Edge Function for messages
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses?user_id=${userId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('GET request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET endpoint ALL EXPENSES
+app.get('/api/all_expenses', async (req, res) => {
+  try {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
       method: 'GET',
       headers: {
@@ -115,6 +139,7 @@ app.get('/api/expenses', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // PUT endpoint EXPENSES
 app.put('/api/update_expense', async (req, res) => {
