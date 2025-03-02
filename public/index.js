@@ -47,7 +47,6 @@ const checkLogin = async () => {
     }
 
     resultElement.textContent = "Checking login credentials...";
-    console.log("function running");
 
     try {
         const response = await fetch('/api/login', {
@@ -60,20 +59,22 @@ const checkLogin = async () => {
                 password: passwordInput.value
             }),
         });
-        console.log(response);
-        const data = await response.json();
-        console.log(data);
 
-        if (response.ok) {
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("userId", data.userId);
-            resultElement.textContent = `Signing in ${usernameInput.value}...`;
-            window.location.href = "main.html";
-        } else {
-            // resultElement.textContent = data.message;
+        if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
         }
 
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success) {
+            resultElement.textContent = `Signing in ${usernameInput.value}...`;
+
+            localStorage.setItem('userId', data.userId);
+            window.location.href = '/main.html';
+        } else {
+            resultElement.textContent = "Incorrect username or password";
+        }
     } catch (error) {
         resultElement.textContent = `Error: ${error.message}`;
     }
@@ -81,5 +82,6 @@ const checkLogin = async () => {
     usernameInput.value = "";
     passwordInput.value = "";
 }
+
 document.getElementById("createAccountButton").addEventListener("click", createNewUser);
 document.getElementById("signInButton").addEventListener("click", checkLogin);

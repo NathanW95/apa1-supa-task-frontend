@@ -190,7 +190,7 @@ app.post('/api/create_user', async (req, res) => {
   }
 });
 
-// POST endpoint login USERS
+// POST endpoint LOGIN (USERS)
 app.post('/api/login', async (req, res) => {
   try {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/login`, {

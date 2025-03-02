@@ -1,3 +1,18 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const userId = localStorage.getItem('userId');
+
+  if (!userId) {
+    console.error('User ID not found in local storage');
+
+    window.location.href = '/index.html';
+    return;
+  }
+
+  console.log('User ID:', userId);
+
+  // getExpenses(userId);
+});
+
 const renderExpenses = (expenses) => {
   const container = document.getElementById("expensesContainer");
   container.innerHTML = ""; // Clear previous content
@@ -229,4 +244,6 @@ document.getElementById("showForm").addEventListener("click", () => {
   form.style.display = form.style.display === "none" ? "block" : "none";
   button.classList.toggle("active", form.style.display === "block");
 });
+
+document.getElementById("sign-out").addEventListener("click", localStorage.clear);
 
