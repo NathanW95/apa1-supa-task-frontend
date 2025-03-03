@@ -7,16 +7,16 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <h1>Expense Tracker</h1>
+  <h1>Expense Tracker</h1>
   <div id="button-div">
-    <button id="showForm">Add Expense</button>
+    <button id="show-form">Add Expense</button>
   </div>
 
-  <div id="expenseForm" class="expense-form" style="display: none;">
+  <div id="expense-form" class="expense-form" style="display: none;" aria-hidden="true">
     <div class="input-row">
-      <input type="text" id="description" placeholder="Description" />
-      <input type="number" id="amount" placeholder="Amount" min="0.01" step="0.01" />
-      <select id="category">
+      <input type="text" id="description" placeholder="Description" aria-required="true"/>
+      <input type="number" id="amount" placeholder="Amount" min="0.01" step="1.00" aria-required="true"/>
+      <select id="category" aria-required="true">
         <option value="General">General</option>
         <option value="Food">Food</option>
         <option value="Transport">Transport</option>
@@ -25,27 +25,28 @@
         <option value="Bills">Bills</option>
       </select>
     </div>
-    <button id="addExpense">Submit Expense </button>
+    <button id="add-expense">Submit Expense </button>
   </div>
 
-  <div id="sorting-options">
-    <select id="sortBy">
+  <div id="sorting-options" aria-label="sorting-options">
+    <select id="sort-by">
       <option value="date_added">Date Added</option>
       <option value="amount">Amount</option>
       <option value="category">Category</option>
     </select>
-    <select id="sortOrder">
+
+    <select id="sort-order">
       <option value="desc">Descending</option>
       <option value="asc">Ascending</option>
     </select>
   </div>
 
-  <div id="result"></div>
-  <div id="expensesContainer" class="expenses-container"></div>
+  <div id="result" role="alert"></div>
+  <div id="expenses-container" class="expenses-container"></div>
 
-    <div id="sign-out">
-      <a href="index.html">Sign Out</a>
-    </div>
+  <div id="sign-out">
+    <a href="index.html">Sign Out</a>
+  </div>
 
   <script src="main.js"></script>
 </body>

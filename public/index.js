@@ -83,5 +83,5 @@ const checkLogin = async () => {
     passwordInput.value = "";
 }
 
-document.getElementById("createAccountButton").addEventListener("click", createNewUser);
-document.getElementById("signInButton").addEventListener("click", checkLogin);
+document.getElementById("create-account-button").addEventListener("click", createNewUser);
+document.getElementById("sign-in-button").addEventListener("click", checkLogin);

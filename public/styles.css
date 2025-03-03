@@ -17,7 +17,7 @@ body {
 }
 
 
-.signInForm {
+.sign-in-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,20 +26,20 @@ body {
     margin: 0 auto;
 }
 
-.signInForm input {
+.sign-in-form input {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     width: 50%;
 }
 
-.signInForm button {
+.sign-in-form button {
     padding: 10px;
     margin-bottom: 10px;
     width: 53%;
 }
 
-#createAccountButton {
+#create-account-button {
     background: #2472cd;
 }
 
@@ -74,7 +74,7 @@ button {
     margin-bottom: 10px;
 }
 
-#showForm.active {
+#show-form.active {
     background: #2a9d8f;
 }
 #result {
@@ -172,7 +172,7 @@ button {
     color: #3ecf8e;
 }
 
-#expenseForm {
+#expense-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -203,15 +203,9 @@ button {
     box-sizing: border-box;
 }
 
-#expenseForm button {
+#expense-form button {
     margin: 20px auto 0;
     display: block;
-}
-
-#footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 }
 
 @media (max-width: 768px) {

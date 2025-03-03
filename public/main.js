@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const userId = localStorage.getItem('userId');
+  const sortingOptions = document.getElementById('sorting-options');
+  const showFormButton = document.getElementById('show-form');
 
   if (!userId) {
     console.error('User ID not found in local storage');
@@ -10,11 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
   getExpenses(userId);
   if (userId === '5') {
     getAllExpenses();
+    sortingOptions.style.display = 'none';
+    showFormButton.style.display = 'none';
   }
 });
 
 const renderExpenses = (expenses) => {
-  const container = document.getElementById("expensesContainer");
+  const container = document.getElementById("expenses-container");
   container.innerHTML = ""; // Clear previous content
 
   expenses.forEach(expense => {
@@ -108,8 +112,8 @@ const getAllExpenses = async () => {
 const sortExpenses = async () => {
   const resultElement = document.getElementById("result");
   const userId = localStorage.getItem('userId');
-  const sortBy = document.getElementById("sortBy").value;
-  const sortOrder = document.getElementById("sortOrder").value;
+  const sortBy = document.getElementById("sort-by").value;
+  const sortOrder = document.getElementById("sort-order").value;
   console.log(userId, sortBy, sortOrder);
 
   resultElement.textContent = "sorting expenses...";
@@ -293,16 +297,16 @@ const deleteUser = async () => {
 
 }
 
-document.getElementById("showForm").addEventListener("click", () => {
-  const form = document.getElementById("expenseForm");
-  const button = document.getElementById("showForm");
+document.getElementById("show-form").addEventListener("click", () => {
+  const form = document.getElementById("expense-form");
+  const button = document.getElementById("show-form");
 
   form.style.display = form.style.display === "none" ? "block" : "none";
   button.classList.toggle("active", form.style.display === "block");
 });
-document.getElementById("addExpense").addEventListener("click", postExpense);
+document.getElementById("add-expense").addEventListener("click", postExpense);
 
-document.getElementById("sortBy").addEventListener("change", sortExpenses);
-document.getElementById("sortOrder").addEventListener("change", sortExpenses);
+document.getElementById("sort-by").addEventListener("change", sortExpenses);
+document.getElementById("sort-order").addEventListener("change", sortExpenses);
 
 document.getElementById("sign-out").addEventListener("click", localStorage.clear);

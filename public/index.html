@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div id="signInForm" class="signInForm">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username"/>
-    <input type="text" id="password" placeholder="Password"/>
-    <button id="createAccountButton">Create Account</button>
-    <button id="signInButton">Sign In</button>
-</div>
-<div id="result"></div>
-<script src="index.js"></script>
+    <div id="sign-in-form" class="sign-in-form">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" aria-label="Username"/>
+        <input type="password" id="password" placeholder="Password" aria-label="Password"/>
+        <button id="create-account-button">Create Account</button>
+        <button id="sign-in-button">Sign In</button>
+    </div>
+
+    <div id="result" role="alert"></div>
+
+    <script src="index.js"></script>
 </body>
 </html>
