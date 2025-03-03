@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '/index.html';
     return;
   }
-  console.log(userId);
-  console.log(typeof userId);
   getExpenses(userId);
   if (userId === '5') {
     getAllExpenses();
@@ -50,7 +48,7 @@ const renderExpenses = (expenses) => {
       <div class="icons">
         <span class="icon edit-icon" onclick="toggleEditMode('${expense.id}')">✏️</span>
         <span class="icon delete-icon" onclick="deleteExpense('${expense.id}')">🗑️</span>
-          <span class="icon save-icon" onclick="saveExpense('${expense.id}')" style="display: none;">✅</span>
+          <span class="icon save-icon" onclick="updateExpense('${expense.id}')" style="display: none;">✅</span>
         <span class="icon cancel-icon" onclick="cancelEditMode('${expense.id}')" style="display: none;">❌</span>
       </div>
       <div class="date"><strong>Date:</strong> ${date}</div>
@@ -60,7 +58,9 @@ const renderExpenses = (expenses) => {
   });
 };
 
-const getExpenses = async (userId) => {  const resultElement = document.getElementById("result");
+// TODO look into storing fetch URLS externally and add url variable to function to avoid function duplication??
+const getExpenses = async (userId) => {
+  const resultElement = document.getElementById("result");
   resultElement.textContent = "Getting expenses...";
   try {
     const response = await fetch(`/api/expenses?userId=${userId}`, {
@@ -82,11 +82,40 @@ const getExpenses = async (userId) => {  const resultElement = document.getEleme
   }
 };
 
-// Old logic to get all expenses
-const getAllExpenses = async () => {  const resultElement = document.getElementById("result");
+const getAllExpenses = async () => {
+  const resultElement = document.getElementById("result");
   resultElement.textContent = "Getting expenses...";
   try {
     const response = await fetch(`/api/all_expenses`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    renderExpenses(data);
+    resultElement.textContent = "";
+  } catch (error) {
+    resultElement.textContent = `Error: ${error.message}`;
+  }
+};
+
+const sortExpenses = async () => {
+  const resultElement = document.getElementById("result");
+  const userId = localStorage.getItem('userId');
+  const sortBy = document.getElementById("sortBy").value;
+  const sortOrder = document.getElementById("sortOrder").value;
+  console.log(userId, sortBy, sortOrder);
+
+  resultElement.textContent = "sorting expenses...";
+
+  try {
+    const response = await fetch(`/api/sort_expenses?user_id=${userId}&sort_by=${sortBy}&sort_order=${sortOrder}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -142,6 +171,60 @@ const postExpense = async () => {
   }
 };
 
+const updateExpense = async (id) => {
+  const tile = document.getElementById(`expense-tile-${id}`);
+  const description = tile.querySelector(".edit-description").value.trim();
+  const amount = parseFloat(tile.querySelector(".edit-amount").value);
+  const category = tile.querySelector(".edit-category").value;
+
+  if (!description || amount <= 0 || !category) {
+    alert("Please enter valid expense details.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/update_expense`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, description, amount, category }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    await getExpenses();
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+};
+
+const deleteExpense = async (id) => {
+  const resultElement = document.getElementById("result");
+  resultElement.textContent = "Deleting...";
+
+  try {
+    const response = await fetch(`/api/delete_expense`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    await getExpenses();
+    resultElement.textContent = "";
+  } catch (error) {
+    resultElement.textContent = `Error: ${error.message}`;
+  }
+}
+
 const toggleEditMode = (id) => {
   const tile = document.getElementById(`expense-tile-${id}`);
   const isEditing = tile.classList.toggle("editing");
@@ -188,37 +271,6 @@ const toggleEditMode = (id) => {
   }
 };
 
-const saveExpense = async (id) => {
-  const tile = document.getElementById(`expense-tile-${id}`);
-  const description = tile.querySelector(".edit-description").value.trim();
-  const amount = parseFloat(tile.querySelector(".edit-amount").value);
-  const category = tile.querySelector(".edit-category").value;
-
-  if (!description || amount <= 0 || !category) {
-    alert("Please enter valid expense details.");
-    return;
-  }
-
-  try {
-    const response = await fetch(`/api/update_expense`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, description, amount, category }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-
-    await getExpenses();
-  } catch (error) {
-    alert(`Error: ${error.message}`);
-  }
-};
-
-
 const cancelEditMode = (id) => {
   const tile = document.getElementById(`expense-tile-${id}`);
 
@@ -237,33 +289,10 @@ const cancelEditMode = (id) => {
   toggleEditMode(id);
 };
 
-const deleteExpense = async (id) => {
-  const resultElement = document.getElementById("result");
-  resultElement.textContent = "Deleting...";
+const deleteUser = async () => {
 
-  try {
-    const response = await fetch(`/api/delete_expense`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-
-    await getExpenses();
-    resultElement.textContent = "";
-  } catch (error) {
-    resultElement.textContent = `Error: ${error.message}`;
-  }
 }
 
-
-document.getElementById("getExpenses").addEventListener("click", getExpenses);
-document.getElementById("addExpense").addEventListener("click", postExpense);
 document.getElementById("showForm").addEventListener("click", () => {
   const form = document.getElementById("expenseForm");
   const button = document.getElementById("showForm");
@@ -271,6 +300,9 @@ document.getElementById("showForm").addEventListener("click", () => {
   form.style.display = form.style.display === "none" ? "block" : "none";
   button.classList.toggle("active", form.style.display === "block");
 });
+document.getElementById("addExpense").addEventListener("click", postExpense);
+
+document.getElementById("sortBy").addEventListener("change", sortExpenses);
+document.getElementById("sortOrder").addEventListener("change", sortExpenses);
 
 document.getElementById("sign-out").addEventListener("click", localStorage.clear);
-

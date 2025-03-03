@@ -68,29 +68,6 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 //   }
 // });
 
-// POST endpoint EXPENSES
-app.post('/api/new_expense', async (req, res) => {
-  try {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(req.body)
-    });
-
-    if (!response.ok) {
-      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    res.json(data);
-  } catch (error) {
-    console.error('POST request error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // GET endpoint EXPENSES
 app.get('/api/expenses', async (req, res) => {
@@ -140,6 +117,57 @@ app.get('/api/all_expenses', async (req, res) => {
   }
 });
 
+// GET endpoint SORT EXPENSES
+app.get('/api/sort_expenses', async (req, res) => {
+  try {
+    const url = new URL(req.url, 'http://localhost:3000');
+    const userId = url.searchParams.get('user_id');
+    const sortBy = url.searchParams.get('sort_by');
+    const sortOrder = url.searchParams.get('sort_order');
+
+    // Call the Supabase Edge Function for messages
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses?user_id=${userId}&sort_by=${sortBy}&sort_order=${sortOrder}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('GET request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST endpoint EXPENSES
+app.post('/api/new_expense', async (req, res) => {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('POST request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // PUT endpoint EXPENSES
 app.put('/api/update_expense', async (req, res) => {

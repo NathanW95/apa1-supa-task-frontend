@@ -45,13 +45,14 @@ body {
 
 h1 {
     text-align: center;
+    margin: 15px;
 }
 
 #button-div {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 button {
@@ -62,6 +63,15 @@ button {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+#sorting-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #showForm.active {
@@ -198,6 +208,11 @@ button {
     display: block;
 }
 
+#footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
 @media (max-width: 768px) {
     .expense-tile {

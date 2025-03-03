@@ -9,12 +9,9 @@
 <body>
     <h1>Expense Tracker</h1>
   <div id="button-div">
-    <button id="getExpenses">Get Expenses</button>
     <button id="showForm">Add Expense</button>
   </div>
-  <div id="sign-out">
-    <a href="index.html">Sign Out</a>
-  </div>
+
   <div id="expenseForm" class="expense-form" style="display: none;">
     <div class="input-row">
       <input type="text" id="description" placeholder="Description" />
@@ -28,10 +25,27 @@
         <option value="Bills">Bills</option>
       </select>
     </div>
-    <button id="addExpense">Submit Expense</button>
+    <button id="addExpense">Submit Expense </button>
   </div>
+
+  <div id="sorting-options">
+    <select id="sortBy">
+      <option value="date_added">Date Added</option>
+      <option value="amount">Amount</option>
+      <option value="category">Category</option>
+    </select>
+    <select id="sortOrder">
+      <option value="desc">Descending</option>
+      <option value="asc">Ascending</option>
+    </select>
+  </div>
+
   <div id="result"></div>
   <div id="expensesContainer" class="expenses-container"></div>
+
+    <div id="sign-out">
+      <a href="index.html">Sign Out</a>
+    </div>
 
   <script src="main.js"></script>
 </body>
