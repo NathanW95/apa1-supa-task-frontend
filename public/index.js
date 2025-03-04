@@ -1,8 +1,12 @@
-const userFeedback = document.getElementById("user-feedback");
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("create-account-button").addEventListener("click", createNewUser);
+    document.getElementById("sign-in-button").addEventListener("click", userLogin);
+});
 
 const createNewUser = async () => {
+    const userFeedback = document.getElementById("user-feedback");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
     if (!usernameInput.value || !passwordInput.value) {
         userFeedback.textContent = "Please enter both a username and password";
         return;
@@ -41,6 +45,10 @@ const createNewUser = async () => {
 }
 
 const userLogin = async () => {
+    const userFeedback = document.getElementById("user-feedback");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+
     if (!usernameInput.value || !passwordInput.value) {
         userFeedback.textContent = "Please enter both a username and password";
         return;
@@ -80,6 +88,9 @@ const userLogin = async () => {
 }
 
 const userExists = async () => {
+    const userFeedback = document.getElementById("user-feedback");
+    const usernameInput = document.getElementById("username");
+
         try {
             const response = await fetch(`/api/users?username=${usernameInput.value}`, {
                 method: "GET",
@@ -107,5 +118,9 @@ const resetLoginInputFields = () => {
     passwordInput.value = "";
 }
 
-document.getElementById("create-account-button").addEventListener("click", createNewUser);
-document.getElementById("sign-in-button").addEventListener("click", userLogin);
+
+module.exports = {
+    createNewUser,
+    userLogin,
+    userExists,
+};
