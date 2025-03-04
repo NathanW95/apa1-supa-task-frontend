@@ -1,8 +1,8 @@
-const createNewUser = async () => {
-    const userFeedback = document.getElementById("user-feedback");
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
+const userFeedback = document.getElementById("user-feedback");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
 
+const createNewUser = async () => {
     if (!usernameInput.value || !passwordInput.value) {
         userFeedback.textContent = "Please enter both a username and password";
         return;
@@ -32,21 +32,16 @@ const createNewUser = async () => {
 
     userFeedback.textContent = "User created! You can now sign in.";
 
-    usernameInput.value = "";
-    passwordInput.value = "";
+    resetLoginInputFields()
 }
 
 const checkLogin = async () => {
-    const resultElement = document.getElementById("user-feedback");
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-
     if (!usernameInput.value || !passwordInput.value) {
-        resultElement.textContent = "Please enter both a username and password";
+        userFeedback.textContent = "Please enter both a username and password";
         return;
     }
 
-    resultElement.textContent = "Checking login credentials...";
+    userFeedback.textContent = "Checking login credentials...";
 
     try {
         const response = await fetch('/api/login', {
@@ -65,20 +60,22 @@ const checkLogin = async () => {
         }
 
         const data = await response.json();
-        console.log(data);
 
         if (data.success) {
-            resultElement.textContent = `Signing in ${usernameInput.value}...`;
+            userFeedback.textContent = `Signing in ${usernameInput.value}...`;
 
             localStorage.setItem('userId', data.userId);
             window.location.href = '/main.html';
         } else {
-            resultElement.textContent = "Incorrect username or password";
+            userFeedback.textContent = "Incorrect username or password";
         }
     } catch (error) {
-        resultElement.textContent = `Error: ${error.message}`;
+        userFeedback.textContent = `Error: ${error.message}`;
     }
+    resetLoginInputFields()
+}
 
+const resetLoginInputFields = () => {
     usernameInput.value = "";
     passwordInput.value = "";
 }

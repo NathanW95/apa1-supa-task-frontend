@@ -303,7 +303,7 @@ const cancelEditMode = (id) => {
 };
 
 const deleteUser = async () => {
-
+ //TODO Implement or remove.
 }
 
 const resetSortingDropdowns = () => {
