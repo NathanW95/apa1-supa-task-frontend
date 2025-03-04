@@ -1,25 +1,30 @@
+const user_id = localStorage.getItem('userId');
+const userFeedback = document.getElementById("user-feedback");
+
 document.addEventListener('DOMContentLoaded', () => {
-  const userId = localStorage.getItem('userId');
   const sortingOptions = document.getElementById('sorting-options');
   const showFormButton = document.getElementById('show-form');
 
-  if (!userId) {
+  if (!user_id) {
     console.error('User ID not found in local storage');
 
     window.location.href = '/index.html';
     return;
   }
-  getExpenses(userId);
-  if (userId === '5') {
+
+  if (user_id === '5') { // BONUS FEATURE: Admin user can see all expenses
     getAllExpenses();
     sortingOptions.style.display = 'none';
     showFormButton.style.display = 'none';
+  }
+  else {
+    getExpenses(user_id);
   }
 });
 
 const renderExpenses = (expenses) => {
   const container = document.getElementById("expenses-container");
-  container.innerHTML = ""; // Clear previous content
+  container.innerHTML = "";
 
   expenses.forEach(expense => {
     const tile = document.createElement("div");
@@ -62,12 +67,10 @@ const renderExpenses = (expenses) => {
   });
 };
 
-// TODO look into storing fetch URLS externally and add url variable to function to avoid function duplication??
-const getExpenses = async (userId) => {
-  const resultElement = document.getElementById("result");
-  resultElement.textContent = "Getting expenses...";
+const getExpenses = async (user_id) => {
+  userFeedback.textContent = "Getting expenses...";
   try {
-    const response = await fetch(`/api/expenses?userId=${userId}`, {
+    const response = await fetch(`/api/expenses?user_id=${user_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -79,16 +82,17 @@ const getExpenses = async (userId) => {
     }
 
     const data = await response.json();
+
     renderExpenses(data);
-    resultElement.textContent = "";
+    clearUserFeedback()
+
   } catch (error) {
-    resultElement.textContent = `Error: ${error.message}`;
+    userFeedback.textContent = `Error: ${error.message}`; // TODO lots of duplication of this...??
   }
 };
 
 const getAllExpenses = async () => {
-  const resultElement = document.getElementById("result");
-  resultElement.textContent = "Getting expenses...";
+  userFeedback.textContent = "Getting expenses...";
   try {
     const response = await fetch(`/api/all_expenses`, {
       method: "GET",
@@ -102,24 +106,22 @@ const getAllExpenses = async () => {
     }
 
     const data = await response.json();
+
     renderExpenses(data);
-    resultElement.textContent = "";
+    clearUserFeedback()
+
   } catch (error) {
-    resultElement.textContent = `Error: ${error.message}`;
+    userFeedback.textContent = `Error: ${error.message}`;
   }
 };
 
 const sortExpenses = async () => {
-  const resultElement = document.getElementById("result");
-  const userId = localStorage.getItem('userId');
   const sortBy = document.getElementById("sort-by").value;
   const sortOrder = document.getElementById("sort-order").value;
-  console.log(userId, sortBy, sortOrder);
-
-  resultElement.textContent = "sorting expenses...";
+  userFeedback.textContent = "sorting expenses...";
 
   try {
-    const response = await fetch(`/api/sort_expenses?user_id=${userId}&sort_by=${sortBy}&sort_order=${sortOrder}`, {
+    const response = await fetch(`/api/sort_expenses?user_id=${user_id}&sort_by=${sortBy}&sort_order=${sortOrder}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -131,25 +133,26 @@ const sortExpenses = async () => {
     }
 
     const data = await response.json();
+
     renderExpenses(data);
-    resultElement.textContent = "";
+    clearUserFeedback()
+
   } catch (error) {
-    resultElement.textContent = `Error: ${error.message}`;
+    userFeedback.textContent = `Error: ${error.message}`;
   }
 };
 
 const postExpense = async () => {
-  const resultElement = document.getElementById("result");
   const description = document.getElementById("description").value.trim();
   const category = document.getElementById("category").value;
   const amount = parseFloat(document.getElementById("amount").value);
 
   if (!description || !amount || amount <= 0) {
-    resultElement.textContent = "Please enter valid expense details.";
+    userFeedback.textContent = "Please enter valid expense details.";
     return;
   }
 
-  resultElement.textContent = "Adding expense...";
+  userFeedback.textContent = "Adding expense...";
 
   try {
     const response = await fetch(`/api/new_expense`, {
@@ -157,21 +160,21 @@ const postExpense = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ description, category, amount }),
+      body: JSON.stringify({ description, category, amount, user_id }),
     });
 
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }
 
-    await getExpenses();
+    await getExpenses(user_id);
 
-    document.getElementById("description").value = "";
-    document.getElementById("amount").value = "";
+    resetSortingDropdowns()
+    resetExpenseFormInputFields()
+    clearUserFeedback()
 
-    resultElement.textContent = "";
   } catch (error) {
-    resultElement.textContent = `Error: ${error.message}`;
+    userFeedback.textContent = `Error: ${error.message}`;
   }
 };
 
@@ -180,6 +183,7 @@ const updateExpense = async (id) => {
   const description = tile.querySelector(".edit-description").value.trim();
   const amount = parseFloat(tile.querySelector(".edit-amount").value);
   const category = tile.querySelector(".edit-category").value;
+
 
   if (!description || amount <= 0 || !category) {
     alert("Please enter valid expense details.");
@@ -199,15 +203,17 @@ const updateExpense = async (id) => {
       throw new Error(`Error: ${response.status}`);
     }
 
-    await getExpenses();
+    await getExpenses(user_id);
+
+    resetSortingDropdowns()
+
   } catch (error) {
     alert(`Error: ${error.message}`);
   }
 };
 
 const deleteExpense = async (id) => {
-  const resultElement = document.getElementById("result");
-  resultElement.textContent = "Deleting...";
+  userFeedback.textContent = "Deleting...";
 
   try {
     const response = await fetch(`/api/delete_expense`, {
@@ -222,10 +228,13 @@ const deleteExpense = async (id) => {
       throw new Error(`Error: ${response.status}`);
     }
 
-    await getExpenses();
-    resultElement.textContent = "";
+    await getExpenses(user_id);
+
+    resetSortingDropdowns()
+    clearUserFeedback()
+
   } catch (error) {
-    resultElement.textContent = `Error: ${error.message}`;
+    userFeedback.textContent = `Error: ${error.message}`;
   }
 }
 
@@ -296,6 +305,21 @@ const cancelEditMode = (id) => {
 const deleteUser = async () => {
 
 }
+
+const resetSortingDropdowns = () => {
+  document.getElementById("sort-by").selectedIndex = 0;
+  document.getElementById("sort-order").selectedIndex = 0;
+}
+
+const resetExpenseFormInputFields = () => {
+  document.getElementById("description").value = "";
+  document.getElementById("amount").value = "";
+}
+
+const clearUserFeedback = () => {
+  userFeedback.textContent = "";
+}
+
 
 document.getElementById("show-form").addEventListener("click", () => {
   const form = document.getElementById("expense-form");

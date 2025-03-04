@@ -77,7 +77,7 @@ button {
 #show-form.active {
     background: #2a9d8f;
 }
-#result {
+#user-feedback {
     margin-top: 10px;
     padding: 15px;
     border-radius: 4px;
@@ -219,6 +219,7 @@ button {
         flex-direction: column;
     }
 
+    /* TODO check this */
     /*.expense-tile {*/
     /*    flex: 1 1 100%;*/
     /*}*/

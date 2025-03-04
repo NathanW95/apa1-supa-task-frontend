@@ -1,19 +1,19 @@
 const createNewUser = async () => {
-    const resultElement = document.getElementById("result");
+    const userFeedback = document.getElementById("user-feedback");
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
 
     if (!usernameInput.value || !passwordInput.value) {
-        resultElement.textContent = "Please enter both a username and password";
+        userFeedback.textContent = "Please enter both a username and password";
         return;
     }
 
     if (passwordInput.value.length < 5) {
-        resultElement.textContent = "Password must be at least 5 characters";
+        userFeedback.textContent = "Password must be at least 5 characters";
         return;
     }
 
-    resultElement.textContent = "Creating user...";
+    userFeedback.textContent = "Creating user...";
 
     try {
         const response = await fetch('/api/create_user', {
@@ -27,17 +27,17 @@ const createNewUser = async () => {
             }),
         });
     } catch (error) {
-        resultElement.textContent = `Error: ${error.message}`;
+        userFeedback.textContent = `Error: ${error.message}`;
     }
 
-    resultElement.textContent = "User created! You can now sign in.";
+    userFeedback.textContent = "User created! You can now sign in.";
 
     usernameInput.value = "";
     passwordInput.value = "";
 }
 
 const checkLogin = async () => {
-    const resultElement = document.getElementById("result");
+    const resultElement = document.getElementById("user-feedback");
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
 

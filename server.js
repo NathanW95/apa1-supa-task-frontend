@@ -73,7 +73,7 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 app.get('/api/expenses', async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost:3000');
-    const userId = url.searchParams.get('userId');
+    const userId = url.searchParams.get('user_id');
 
     // Call the Supabase Edge Function for messages
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses?user_id=${userId}`, {
