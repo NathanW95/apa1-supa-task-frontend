@@ -114,6 +114,8 @@ const userExists = async () => {
     };
 
 const resetLoginInputFields = () => {
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
     usernameInput.value = "";
     passwordInput.value = "";
 }
