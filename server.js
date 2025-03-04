@@ -72,7 +72,7 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 // GET endpoint EXPENSES
 app.get('/api/expenses', async (req, res) => {
   try {
-    const url = new URL(req.url, 'http://localhost:3000');
+    const url = new URL(req.url, 'http://localhost:3000'); // TODO EXTRACT TO GLOBAL SCOPE FOR ALL ENDPOINTS TO ACCESS?
     const userId = url.searchParams.get('user_id');
 
     // Call the Supabase Edge Function for messages
@@ -218,6 +218,32 @@ app.delete('/api/delete_expense', async (req, res) => {
   }
 });
 
+
+// GET endpoint USERS
+app.get('/api/users', async (req, res) => {
+  try {
+    const url = new URL(req.url, 'http://localhost:3000');
+    const username = url.searchParams.get('username');
+
+    // Call the Supabase Edge Function for messages
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/users?username=${username}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('GET request error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // POST endpoint create USERS
 app.post('/api/create_user', async (req, res) => {

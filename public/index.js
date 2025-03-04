@@ -8,6 +8,11 @@ const createNewUser = async () => {
         return;
     }
 
+    if (await userExists()) {
+        userFeedback.textContent = "User already exists! Choose another username or sign in."
+        return;
+    }
+
     if (passwordInput.value.length < 5) {
         userFeedback.textContent = "Password must be at least 5 characters";
         return;
@@ -35,7 +40,7 @@ const createNewUser = async () => {
     resetLoginInputFields()
 }
 
-const checkLogin = async () => {
+const userLogin = async () => {
     if (!usernameInput.value || !passwordInput.value) {
         userFeedback.textContent = "Please enter both a username and password";
         return;
@@ -66,14 +71,36 @@ const checkLogin = async () => {
 
             localStorage.setItem('userId', data.userId);
             window.location.href = '/main.html';
-        } else {
-            userFeedback.textContent = "Incorrect username or password";
         }
-    } catch (error) {
-        userFeedback.textContent = `Error: ${error.message}`;
+    }
+    catch (error) {
+        userFeedback.textContent = "Incorrect username or password";
     }
     resetLoginInputFields()
 }
+
+const userExists = async () => {
+        try {
+            const response = await fetch(`/api/users?username=${usernameInput.value}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            return !!data.success;
+
+        }
+        catch (error) {
+            userFeedback.textContent = `Error: ${error.message}`; // TODO lots of duplication of this...??
+        }
+    };
 
 const resetLoginInputFields = () => {
     usernameInput.value = "";
@@ -81,4 +108,4 @@ const resetLoginInputFields = () => {
 }
 
 document.getElementById("create-account-button").addEventListener("click", createNewUser);
-document.getElementById("sign-in-button").addEventListener("click", checkLogin);
+document.getElementById("sign-in-button").addEventListener("click", userLogin);
