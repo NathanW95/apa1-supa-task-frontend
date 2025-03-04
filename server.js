@@ -16,66 +16,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public')); // Serve static files from 'public' directory
 
-// // MESSAGES
-// POST endpoint
-// // CAN DELETE
-// app.post('/api/new_message', async (req, res) => {
-//   try {
-//
-//     // Call the Supabase Edge Function for messages
-//     const response = await fetch(`${SUPABASE_URL}/functions/v1/messages`, {
-//       method: 'POST',
-//       headers: {
-//         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-//       },
-//       body: JSON.stringify(req.body)
-//     });
-//
-//     if (!response.ok) {
-//       throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
-//     }
-//
-//     const data = await response.json();
-//     res.json(data);
-//   } catch (error) {
-//     console.error('GET request error:', error);
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-//
-// // GET endpoint
-// // CAN DELETE
-// app.get('/api/messages', async (req, res) => {
-//   try {
-//
-//     // Call the Supabase Edge Function for messages
-//     const response = await fetch(`${SUPABASE_URL}/functions/v1/messages`, {
-//       method: 'GET',
-//       headers: {
-//         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-//       }
-//     });
-//
-//     if (!response.ok) {
-//       throw new Error(`Supabase returned ${response.status}: ${response.statusText}`);
-//     }
-//
-//     const data = await response.json();
-//     res.json(data);
-//   } catch (error) {
-//     console.error('GET request error:', error);
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-
 // GET endpoint EXPENSES
 app.get('/api/expenses', async (req, res) => {
   try {
-    const url = new URL(req.url, 'http://localhost:3000'); // TODO EXTRACT TO GLOBAL SCOPE FOR ALL ENDPOINTS TO ACCESS?
+    const url = new URL(req.url, 'http://localhost:3000'); // TODO EXTRACT TO GLOBAL SCOPE FOR ALL ENDPOINTS TO ACCESS? also userId
     const userId = url.searchParams.get('user_id');
 
-    // Call the Supabase Edge Function for messages
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses?user_id=${userId}`, {
       method: 'GET',
       headers: {
@@ -225,7 +171,6 @@ app.get('/api/users', async (req, res) => {
     const url = new URL(req.url, 'http://localhost:3000');
     const username = url.searchParams.get('username');
 
-    // Call the Supabase Edge Function for messages
     const response = await fetch(`${SUPABASE_URL}/functions/v1/users?username=${username}`, {
       method: 'GET',
       headers: {
