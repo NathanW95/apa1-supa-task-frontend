@@ -1,9 +1,8 @@
-const user_id = localStorage.getItem('userId');
-const userFeedback = document.getElementById("user-feedback");
-
 document.addEventListener('DOMContentLoaded', () => {
+  const user_id = localStorage.getItem('userId');
   const sortingOptions = document.getElementById('sorting-options');
   const showFormButton = document.getElementById('show-form');
+
 
   if (!user_id) {
     console.error('User ID not found in local storage');
@@ -12,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  if (user_id === '5') { // BONUS FEATURE: Admin user can see all expenses
+  if (user_id === '5') {    // BONUS FEATURE: Admin user can see all users expenses
     getAllExpenses();
     sortingOptions.style.display = 'none';
     showFormButton.style.display = 'none';
@@ -20,6 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
   else {
     getExpenses(user_id);
   }
+
+    document.getElementById("show-form").addEventListener("click", () => {
+        const form = document.getElementById("expense-form");
+        const button = document.getElementById("show-form");
+
+        form.style.display = form.style.display === "none" ? "block" : "none";
+        button.classList.toggle("active", form.style.display === "block");
+    });
+    document.getElementById("add-expense").addEventListener("click", postExpense);
+
+    document.getElementById("sort-by").addEventListener("change", sortExpenses);
+    document.getElementById("sort-order").addEventListener("change", sortExpenses);
+
+    document.getElementById("sign-out").addEventListener("click", localStorage.clear);
+//TODO: TIDY UP DOC LISTENERS ETC
 });
 
 const renderExpenses = (expenses) => {
@@ -68,6 +82,7 @@ const renderExpenses = (expenses) => {
 };
 
 const getExpenses = async (user_id) => {
+  const userFeedback = document.getElementById("user-feedback");
   userFeedback.textContent = "Getting expenses...";
   try {
     const response = await fetch(`/api/expenses?user_id=${user_id}`, {
@@ -82,6 +97,7 @@ const getExpenses = async (user_id) => {
     }
 
     const data = await response.json();
+    console.log(data);
 
     renderExpenses(data);
     clearUserFeedback()
@@ -92,6 +108,7 @@ const getExpenses = async (user_id) => {
 };
 
 const getAllExpenses = async () => {
+  const userFeedback = document.getElementById("user-feedback");
   userFeedback.textContent = "Getting expenses...";
   try {
     const response = await fetch(`/api/all_expenses`, {
@@ -116,8 +133,11 @@ const getAllExpenses = async () => {
 };
 
 const sortExpenses = async () => {
+  const user_id = localStorage.getItem('userId');
+  const userFeedback = document.getElementById("user-feedback");
   const sortBy = document.getElementById("sort-by").value;
   const sortOrder = document.getElementById("sort-order").value;
+
   userFeedback.textContent = "sorting expenses...";
 
   try {
@@ -143,6 +163,8 @@ const sortExpenses = async () => {
 };
 
 const postExpense = async () => {
+  const user_id = localStorage.getItem('userId');
+  const userFeedback = document.getElementById("user-feedback");
   const description = document.getElementById("description").value.trim();
   const category = document.getElementById("category").value;
   const amount = parseFloat(document.getElementById("amount").value);
@@ -179,6 +201,7 @@ const postExpense = async () => {
 };
 
 const updateExpense = async (id) => {
+  const user_id = localStorage.getItem('userId');
   const tile = document.getElementById(`expense-tile-${id}`);
   const description = tile.querySelector(".edit-description").value.trim();
   const amount = parseFloat(tile.querySelector(".edit-amount").value);
@@ -213,6 +236,8 @@ const updateExpense = async (id) => {
 };
 
 const deleteExpense = async (id) => {
+  const user_id = localStorage.getItem('userId');
+  const userFeedback = document.getElementById("user-feedback");
   userFeedback.textContent = "Deleting...";
 
   try {
@@ -317,20 +342,15 @@ const resetExpenseFormInputFields = () => {
 }
 
 const clearUserFeedback = () => {
-  userFeedback.textContent = "";
+  const userFeedback = document.getElementById("user-feedback");
+  userFeedback.textContent = ""; // TODO remove function, and put this line back in all functions
 }
 
 
-document.getElementById("show-form").addEventListener("click", () => {
-  const form = document.getElementById("expense-form");
-  const button = document.getElementById("show-form");
 
-  form.style.display = form.style.display === "none" ? "block" : "none";
-  button.classList.toggle("active", form.style.display === "block");
-});
-document.getElementById("add-expense").addEventListener("click", postExpense);
-
-document.getElementById("sort-by").addEventListener("change", sortExpenses);
-document.getElementById("sort-order").addEventListener("change", sortExpenses);
-
-document.getElementById("sign-out").addEventListener("click", localStorage.clear);
+module.exports = {
+  getExpenses,
+  postExpense,
+  updateExpense,
+  deleteExpense,
+}
