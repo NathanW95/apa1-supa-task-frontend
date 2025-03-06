@@ -26,6 +26,11 @@ body {
     margin: 0 auto;
 }
 
+.sign-in-form p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
 .sign-in-form input {
     padding: 10px;
     margin-bottom: 10px;
