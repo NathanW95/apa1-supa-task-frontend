@@ -164,7 +164,6 @@ app.delete('/api/delete_expense', async (req, res) => {
   }
 });
 
-
 // GET endpoint USERS
 app.get('/api/users', async (req, res) => {
   try {

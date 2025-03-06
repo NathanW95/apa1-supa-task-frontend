@@ -218,11 +218,6 @@ button {
     .input-row {
         flex-direction: column;
     }
-
-    /* TODO check this */
-    /*.expense-tile {*/
-    /*    flex: 1 1 100%;*/
-    /*}*/
 }
 
 @media (max-width: 480px) {
