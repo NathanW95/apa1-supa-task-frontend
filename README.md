@@ -1,78 +1,76 @@
 # APA1 Supa Task Frontend
 
 ## Project Overview
-This project for an open ending CRUD app, what the app does is your choice but it should implement CRUD functionality
+This project is an open-ended CRUD application that allows users to manage expenses. The frontend is built to interact with a Supabase backend, providing full CRUD functionality, user authentication, and various user interface enhancements.
 
-## Setup Instructions
-1. Install dependencies: Run `npm install` in your terminal to install all necessary dependencies.
-2. Set up Supabase:
-   - Create a free Supabase account if you don't have one
-   - Create a new project in your Supabase dashboard
-   - Copy your Supabase URL and anon key into the `.env` file (use `.env.example` as a template)
-3. Start the development server: Run `node server.js` in your terminal.
-4. Open your web browser and navigate to `http://localhost:3000` to access the application.
+## Features
 
-## Database Management
-The project uses Supabase as the database provider:
+### Responsive Design
+- **Responsive Layout**: Utilizes CSS media queries and a tile-based layout to ensure the application is visually appealing and functional across different devices. The layout dynamically adjusts to different screen sizes, providing a consistent user experience.
 
-The [companion backend app](https://github.com/jdowie-ada/apa1-supa-task-backend) will be used to manage the database 
+### Expense Management
+- **Render Expenses**: Expenses are rendered dynamically by creating HTML div elements for each expense, using template literals for IDs. JSON responses are mapped to HTML elements, with certain elements hidden or revealed based on the mode (e.g., edit mode).
+- **Sort Drop Downs**: Sort options are available for expenses, with values stored in JavaScript and passed as search parameters to backend endpoints for sorting.
+- **Add Expense Form**: The form toggles visibility with an event listener, changing button colors to indicate edit mode. Input values are extracted and passed in a JSON body to the POST endpoint on submission.
+- **Edit Mode**: Allows users to update expense details with front-end validation and user feedback. Text values become input elements with placeholders of the current value. Once edited, users can submit to make a PUT request and update expenses.
+- **Cancel Edit Mode**: Provides a feature to revert input fields to their original values if changes are not saved, ensuring data consistency.
+- **Delete Expense**: Deletes an expense by passing its ID to the API, with the UI updating immediately to reflect changes.
+
+### Data Handling
+- **Get Expenses**: Fetches expenses for the logged-in user by using the user ID stored in local storage. This ensures that each user only sees their own expenses.
+- **Real-time Updates**: Any changes to expenses, such as adding, editing, or deleting, will trigger a call to `getExpenses` and re-render the homepage to ensure it is up-to-date.
+
+### Bonus Features
+- **Admin Access**: Added as a bonus feature for extended functionality. This feature is included for academic purposes and would not be part of a live app.
+
+## Challenges and Solutions
+
+### Frontend Development
+- **Express.js and DOM Learning Curve**: As this was my first full-stack project, understanding how Express.js serves as a proxy and interacts with Supabase was crucial. DOM manipulation required careful handling of methods like `.innerText` and `.value` to ensure correct data extraction and updates.
+- **Responsive Design**: Achieving a responsive design involved using CSS media queries and understanding how to align elements consistently across different devices.
+- **User ID Management**: Storing and retrieving the user ID in local storage was essential for session management and filtering data. This required ensuring consistency between frontend and backend data handling.
+- **DOM Event Listeners and Testing**: Initially, DOM elements were accessed globally using `document.getElementById`, which caused issues with unit tests as functions imported separately couldn't access these elements. Refactoring the code to declare DOM element access within each function resolved this issue, allowing functions to independently access necessary DOM elements during testing.
+
+### Login Page Setup
+Setting up the login page involved creating a new table, backend endpoints, and frontend logic for user authentication. Initially, I attempted to verify credentials with a GET request, but research indicated that a POST request with input values was more appropriate. This led to the creation of separate endpoints for user creation and login, allowing the frontend to handle these processes distinctly.
+
+## Development Process
+Throughout the development process, I documented challenges and solutions, which included:
+- Debugging API endpoints and ensuring correct data flow between frontend and backend.
+- Addressing CSS alignment issues to maintain a consistent and responsive design.
+- Implementing robust error handling and user feedback mechanisms to enhance user experience.
 
 ## Testing
-This is an open-ended project, and you may choose your preferred testing approach:
-- Manual testing through the application interface
-- Leveraging Supabase's built-in Row Level Security (RLS) policy testing
-- Writing custom unit or integration tests with a framework of your choice (Jest, Mocha, etc.)
 
-## Assignment Objectives
-- Extend and enhance the existing web application
-- Apply database and frontend development principles using Supabase
-- Follow good programming standards
-- Develop and execute a testing strategy appropriate for your implementation
-- Use GitHub effectively for collaboration and documentation
-- Prepare for a viva to explain project design and code implementation
+### Manual Testing
+- **Postman**: Used extensively for testing backend API endpoints. This included verifying CRUD operations and ensuring that data was correctly handled by the Supabase backend. This was essential in ensuring that the issue was infact regarding the front end.
 
-## TODO
+- **Chrome DevTools**: Utilized for frontend testing, focusing on console logs and the network tab to monitor API calls and responses. This helped in debugging and ensuring that the frontend correctly interacted with the backend.
 
-### Core Functionalities
-1. Implement full CRUD operations for all items using Supabase's JavaScript client
-2. Create a unified interface to manage all items
-3. Create appropriate database relationships and constraints using Supabase's SQL editor
+Screenshots have been provided in the submission as evidence of manual testing. 
 
-### Extend Functionalities
-1. User login auth etc.
-2. Enhance the frontend to display and manage the various items
-3. Implement sorting and filtering options
-4. (on backend) write more edge functions to extend API
+## Unit Testing Overview
+The most comprehensive testing was conducted manually. However, some unit tests were written for core functionality. See below:
 
-You're free to come up with your own ideas too either on the front or backend
+- **User Authentication**: 
+  - Tests cover user creation, login processes, and checks for existing users, ensuring that authentication flows are secure and function as expected.
 
-### Good Programming Standards
-1. Structure your code for readability and modularity
-2. Use consistent naming conventions
-3. Implement proper error handling 
-4. Document your code thoroughly
-etc.
+- **Expense Management**: 
+  - Includes tests for fetching, adding, updating, and deleting expenses, verifying that each operation interacts correctly with the backend and updates the user interface appropriately.
 
-### Testing
-Ideas for testing:
-1. Document manual testing procedures and results
-2. Leverage Supabase's RLS policies and test them
-3. Write unit/integration tests for critical functionality
+### Focus on Edge Cases
+- **Input Validation and User Feedback**: 
+  - The tests address edge cases such as incomplete input fields and incorrect data formats, ensuring that the application provides appropriate feedback to users.
 
-### GitHub Practices
-1. Use Git and GitHub for version control
-2. Create a comprehensive README documenting your implementation (replace this README)
-3. Make small, meaningful commits with clear messages
-4. Create a project board to track your progress (optional)
+- **Edit Mode and Data Consistency**: 
+  - Ensures that edit operations maintain data integrity and that changes are accurately reflected in the application.
 
-## Additional Features (Optional)
-1. Implement responsive design for different devices
-2. Add accessibility features following WCAG guidelines
-3. Implement more advanced Supabase features:
-   - Real-time updates using Supabase subscriptions
-   - Storage for product images
-   - Edge Functions for complex operations
-4. Add analytics dashboard using Supabase's built-in analytics
+### Future Testing Improvements
+- **Automated Testing**: Plan to implement more comprehensive automated tests to cover a broader range of scenarios and improve test coverage.
+- **Integration Testing**: Aim to develop integration tests that simulate real user interactions across the frontend and backend to ensure seamless functionality.
 
+## Note
+For information on the backend, please refer to the backend repo's README.md file.
 
-Remember to document your development process, including any challenges you encounter and how you solve them. This will be valuable during your viva and for maintaining the project in the future.
+Screenshots have been provided in the submission as evidence of manual testing.
+
