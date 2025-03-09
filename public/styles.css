@@ -219,7 +219,7 @@ button {
     }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 610px) {
     .input-row {
         flex-direction: column;
     }
