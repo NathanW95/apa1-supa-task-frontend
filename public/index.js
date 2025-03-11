@@ -91,27 +91,27 @@ const userExists = async () => {
     const userFeedback = document.getElementById("user-feedback");
     const usernameInput = document.getElementById("username");
 
-        try {
-            const response = await fetch(`/api/users?username=${usernameInput.value}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+    try {
+        const response = await fetch(`/api/users?username=${usernameInput.value}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            return !!data.success;
-
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
         }
-        catch (error) {
-            userFeedback.textContent = `Error: ${error.message}`; // TODO lots of duplication of this...??
-        }
-    };
+
+        const data = await response.json();
+
+        return !!data.success;
+
+    }
+    catch (error) {
+        userFeedback.textContent = `Error: ${error.message}`;
+    }
+};
 
 const resetLoginInputFields = () => {
     const usernameInput = document.getElementById("username");

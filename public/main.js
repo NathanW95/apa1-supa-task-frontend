@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const sortingOptions = document.getElementById('sorting-options');
   const showFormButton = document.getElementById('show-form');
 
-
   if (!user_id) {
     console.error('User ID not found in local storage');
 
@@ -20,20 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
     getExpenses(user_id);
   }
 
-    document.getElementById("show-form").addEventListener("click", () => {
-        const form = document.getElementById("expense-form");
-        const button = document.getElementById("show-form");
+  document.getElementById("show-form").addEventListener("click", () => {
+      const form = document.getElementById("expense-form");
+      const button = document.getElementById("show-form");
 
-        form.style.display = form.style.display === "none" ? "block" : "none";
-        button.classList.toggle("active", form.style.display === "block");
-    });
-    document.getElementById("add-expense").addEventListener("click", postExpense);
+      form.style.display = form.style.display === "none" ? "block" : "none";
+      button.classList.toggle("active", form.style.display === "block");
+  });
 
-    document.getElementById("sort-by").addEventListener("change", sortExpenses);
-    document.getElementById("sort-order").addEventListener("change", sortExpenses);
-
-    document.getElementById("sign-out").addEventListener("click", localStorage.clear);
-//TODO: TIDY UP DOC LISTENERS ETC
+  document.getElementById("add-expense").addEventListener("click", postExpense);
+  document.getElementById("sort-by").addEventListener("change", sortExpenses);
+  document.getElementById("sort-order").addEventListener("change", sortExpenses);
+  document.getElementById("sign-out").addEventListener("click", localStorage.clear);
 });
 
 const renderExpenses = (expenses) => {
@@ -97,13 +94,12 @@ const getExpenses = async (user_id) => {
     }
 
     const data = await response.json();
-    console.log(data);
 
     renderExpenses(data);
     clearUserFeedback()
 
   } catch (error) {
-    userFeedback.textContent = `Error: ${error.message}`; // TODO lots of duplication of this...??
+    userFeedback.textContent = `Error: ${error.message}`;
   }
 };
 
@@ -327,10 +323,6 @@ const cancelEditMode = (id) => {
   toggleEditMode(id);
 };
 
-const deleteUser = async () => {
- //TODO Implement or remove.
-}
-
 const resetSortingDropdowns = () => {
   document.getElementById("sort-by").selectedIndex = 0;
   document.getElementById("sort-order").selectedIndex = 0;
@@ -343,9 +335,8 @@ const resetExpenseFormInputFields = () => {
 
 const clearUserFeedback = () => {
   const userFeedback = document.getElementById("user-feedback");
-  userFeedback.textContent = ""; // TODO remove function, and put this line back in all functions
+  userFeedback.textContent = "";
 }
-
 
 
 module.exports = {
