@@ -71,11 +71,11 @@ The most comprehensive testing was conducted manually. However, some unit tests 
 
 ## Login credentials
 ### Below are some login credentials that you can use to test the application with pre-existing 'users' if required.
-Nathan : Pass1
-Callum : Pass2
-Josh : Pass3
-Charlie : Pass4
-Admin : Admin 
+- Nathan : Pass1
+- Callum : Pass2
+- Josh : Pass3
+- Charlie : Pass4
+- Admin : Admin 
 
 Attention - logging in as Admin will display all users' expenses and disable ability to add expenses and sort expenses.
 
