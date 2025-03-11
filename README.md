@@ -69,6 +69,16 @@ The most comprehensive testing was conducted manually. However, some unit tests 
 - **Automated Testing**: Plan to implement more comprehensive automated tests to cover a broader range of scenarios and improve test coverage.
 - **Integration Testing**: Aim to develop integration tests that simulate real user interactions across the frontend and backend to ensure seamless functionality.
 
+## Login credentials
+### Below are some login credentials that you can use to test the application with pre-existing 'users' if required.
+Nathan : Pass1
+Callum : Pass2
+Josh : Pass3
+Charlie : Pass4
+Admin : Admin 
+
+Attention - logging in as Admin will display all users' expenses and disable ability to add expenses and sort expenses.
+
 ## Note
 For information on the backend, please refer to the backend repo's README.md file.
 
