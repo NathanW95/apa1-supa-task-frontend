@@ -19,7 +19,7 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 // GET endpoint EXPENSES
 app.get('/api/expenses', async (req, res) => {
   try {
-    const url = new URL(req.url, 'http://localhost:3000'); // TODO EXTRACT TO GLOBAL SCOPE FOR ALL ENDPOINTS TO ACCESS? also userId
+    const url = new URL(req.url, 'http://localhost:3000');
     const userId = url.searchParams.get('user_id');
 
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses?user_id=${userId}`, {
@@ -71,7 +71,6 @@ app.get('/api/sort_expenses', async (req, res) => {
     const sortBy = url.searchParams.get('sort_by');
     const sortOrder = url.searchParams.get('sort_order');
 
-    // Call the Supabase Edge Function for messages
     const response = await fetch(`${SUPABASE_URL}/functions/v1/expenses?user_id=${userId}&sort_by=${sortBy}&sort_order=${sortOrder}`, {
       method: 'GET',
       headers: {
